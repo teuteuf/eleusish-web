@@ -1,57 +1,57 @@
 openapi: 3.0.1
 info:
   title: eleusish-api
-  description: My cool TypeScript app
+  description: API for Eleusish game
   version: 1.0.0
 servers:
 - url: /api/v1
 tags:
-- name: Examples
-  description: Simple example endpoints
+- name: Rules
+  description: Game rules endpoints
 - name: Specification
   description: The swagger API specification
 paths:
-  /examples:
+  /rules:
     get:
       tags:
-      - Examples
-      description: Fetch all examples
+      - Rules
+      description: Fetch all rules
       responses:
         200:
-          description: Returns all examples
+          description: Returns all rules
           content: {}
     post:
       tags:
-      - Examples
-      description: Create a new example
+      - Rules
+      description: Create a new rule
       requestBody:
-        description: an example
+        description: a rule
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExampleBody'
+              $ref: '#/components/schemas/RuleBody'
         required: true
       responses:
         200:
-          description: Returns all examples
+          description: Returns all rules
           content: {}
-  /examples/{id}:
+  /rules/{id}:
     get:
       tags:
-      - Examples
+      - Rules
       parameters:
       - name: id
         in: path
-        description: The id of the example to retrieve
+        description: The id of the rule to retrieve
         required: true
         schema:
           type: integer
       responses:
         200:
-          description: Return the example with the specified id
+          description: Return the rule with the specified id
           content: {}
         404:
-          description: Example not found
+          description: Rule not found
           content: {}
   /spec:
     get:
@@ -63,12 +63,12 @@ paths:
           content: {}
 components:
   schemas:
-    ExampleBody:
-      title: example
+    RuleBody:
+      title: code
       required:
-      - name
+      - code
       type: object
       properties:
-        name:
+        code:
           type: string
-          example: no_stress
+          example: function getInitialCards (remainingCards) { return []; }; function isValid (previousCards, newCard { return true; };
