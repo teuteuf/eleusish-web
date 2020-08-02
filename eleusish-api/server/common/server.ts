@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import express, { Application } from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
