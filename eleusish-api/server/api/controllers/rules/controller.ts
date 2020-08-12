@@ -8,7 +8,7 @@ export class Controller {
   }
 
   async byId(req: Request, res: Response): Promise<void> {
-    const id = Number.parseInt(req.params['id'])
+    const id = req.params['id']
     const rule = await RulesService.byId(id)
 
     if (rule) {

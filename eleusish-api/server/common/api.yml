@@ -45,7 +45,7 @@ paths:
         description: The id of the rule to retrieve
         required: true
         schema:
-          type: integer
+          type: string
       responses:
         200:
           description: Return the rule with the specified id

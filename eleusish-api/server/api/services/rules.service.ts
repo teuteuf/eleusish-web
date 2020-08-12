@@ -1,33 +1,27 @@
 import L from '../../common/logger'
-
-let id = 0
-
-interface Rule {
-  id: number
-  code: string
-}
-
-const rules: Rule[] = []
+import ruleRepository from '../repositories/rules.repository'
+import { Rule } from '../domain/rules/rule'
+import shortid from 'shortid'
 
 export class RulesService {
   async all(): Promise<Rule[]> {
+    const rules = await ruleRepository.findAll()
     L.info(rules, 'fetch all rules')
     return rules
   }
 
-  async byId(id: number): Promise<Rule> {
+  async byId(id: string): Promise<Rule> {
     L.info(`fetch rule with id ${id}`)
-    const allRules = await this.all()
-    return allRules[id]
+    return ruleRepository.findById(id)
   }
 
   async create(code: string): Promise<Rule> {
     L.info(`create rule with code ${code}`)
     const rule: Rule = {
-      id: id++,
+      id: shortid(),
       code: code,
     }
-    rules.push(rule)
+    await ruleRepository.insert(rule)
     return rule
   }
 }

@@ -8,6 +8,9 @@ import cookieParser from 'cookie-parser'
 import l from './logger'
 
 import installValidator from './openapi'
+import { createConnection as createConnectionTypeORM } from 'typeorm'
+
+createConnectionTypeORM()
 
 const app = express()
 const exit = process.exit
