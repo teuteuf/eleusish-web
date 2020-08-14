@@ -71,4 +71,4 @@ components:
       properties:
         code:
           type: string
-          example: function getInitialCards (remainingCards) { return []; }; function isValid (previousCards, newCard { return true; };
+          example: function getInitialCards (remainingCards) { return []; }; function isValid (previousCards, newCard) { return true; };
