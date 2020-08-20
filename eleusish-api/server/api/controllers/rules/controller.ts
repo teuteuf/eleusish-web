@@ -23,4 +23,5 @@ export class Controller {
     res.status(201).location(`/api/v1/rules/${rule.id}`).json(rule)
   }
 }
+
 export default new Controller()
