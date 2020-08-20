@@ -1,0 +1,9 @@
+.newRulePage {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    font-size: large;
+    text-transform: uppercase;
+}
