@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm'
-import { Rule } from '../../entity/Rule'
+import { Rule } from '../../db/entity/Rule'
 import RuleRepository from '../domain/rules/repository'
 
 const ruleRepositoryDb: RuleRepository = {
