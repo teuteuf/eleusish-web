@@ -1,9 +1,12 @@
 import { Rule } from './rule'
 
-export async function createNewRule(code: string): Promise<Rule> {
+export async function createNewRule(
+  authorId: string,
+  code: string
+): Promise<Rule> {
   const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/rules`, {
     method: 'POST',
-    body: JSON.stringify({ code }),
+    body: JSON.stringify({ authorId, code }),
     headers: {
       'Content-Type': 'application/json',
     },

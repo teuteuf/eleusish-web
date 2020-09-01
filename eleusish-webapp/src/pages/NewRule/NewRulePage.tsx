@@ -14,24 +14,33 @@ function isValid (previousCards, newCard) {
 
 const NewRulePage = (): ReactElement => {
   const [code, setCode] = useState<string | undefined>(defaultRule)
+  const [authorId, setAuthorId] = useState<string>('')
   const [submitting, setSubmitting] = useState<boolean>(false)
 
   const handleSubmit = async () => {
-    if (code == null || code.length === 0) {
+    if (code == null || code.length === 0 || authorId.length === 0) {
       return
     }
 
     setSubmitting(true)
-    await RulesService.createNewRule(code)
+    try {
+      await RulesService.createNewRule(authorId, code)
+    } catch (e) {
+      console.error(`error while creating rule: ${e.message}`)
+    }
     setSubmitting(false)
   }
 
   return (
     <div className={styles.newRulePage}>
       <h1>New rule</h1>
+      <input
+        placeholder="Player ID"
+        onChange={(event) => setAuthorId(event.target.value)}
+      />
       <ControlledEditor
         theme="dark"
-        height="80vh"
+        height="75vh"
         language="javascript"
         options={{ minimap: { enabled: false } }}
         value={code}
