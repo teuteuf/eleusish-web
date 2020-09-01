@@ -23,10 +23,10 @@
       "dotenv": "^8.2.0",
       "express": "^4.17.1",
       "express-openapi-validator": "^3.16.7",
+      "nanoid": "^3.1.12",
       "pg": "^8.3.0",
       "pino": "^6.4.0",
       "reflect-metadata": "^0.1.10",
-      "shortid": "^2.2.15",
       "typeorm": "0.2.25"
    },
    "devDependencies": {

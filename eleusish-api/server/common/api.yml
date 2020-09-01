@@ -8,9 +8,27 @@ servers:
 tags:
 - name: Rules
   description: Game rules endpoints
+- name: Players
+  description: Player endpoints
 - name: Specification
   description: The swagger API specification
 paths:
+  /players:
+    post:
+      tags:
+        - Players
+      description: Create new player
+      requestBody:
+        description: a player
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerBody'
+        required: true
+      responses:
+        201:
+          description: Returns created player
+          content: {}
   /rules:
     get:
       tags:
@@ -32,8 +50,8 @@ paths:
               $ref: '#/components/schemas/RuleBody'
         required: true
       responses:
-        200:
-          description: Returns all rules
+        201:
+          description: Returns created rule
           content: {}
   /rules/{id}:
     get:
@@ -64,11 +82,22 @@ paths:
 components:
   schemas:
     RuleBody:
-      title: code
+      title: new rule
       required:
       - code
+      - authorId
       type: object
       properties:
+        authorId:
+          type: string
         code:
           type: string
           example: function getInitialCards (remainingCards) { return []; }; function isValid (previousCards, newCard) { return true; };
+    PlayerBody:
+      title: new player
+      required:
+      - pseudo
+      type: object
+      properties:
+        pseudo:
+          type: string

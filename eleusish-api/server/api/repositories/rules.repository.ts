@@ -5,18 +5,29 @@ import RuleRepository from '../domain/rules/repository'
 const ruleRepositoryDb: RuleRepository = {
   findAll: async () => {
     const repository = getRepository(Rule)
-    const rulesDb = await repository.find()
+    const rulesDb = await repository.find({ relations: ['author'] })
     return rulesDb.map((ruleDb) => ({
       id: ruleDb.id,
       code: ruleDb.code,
+      author: {
+        id: ruleDb.author.id,
+        pseudo: ruleDb.author.pseudo,
+      },
     }))
   },
   findById: async (id) => {
     const repository = getRepository(Rule)
-    const rulesDb = await repository.findOne({ id })
-    return {
-      id: rulesDb.id,
-      code: rulesDb.code,
+    const ruleDb = await repository.findOne({ id }, { relations: ['player'] })
+
+    if (ruleDb != null) {
+      return {
+        id: ruleDb.id,
+        code: ruleDb.code,
+        author: {
+          id: ruleDb.author.id,
+          pseudo: ruleDb.author.pseudo,
+        },
+      }
     }
   },
   insert: async (rule) => {

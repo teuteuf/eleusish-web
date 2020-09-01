@@ -19,8 +19,13 @@ export class Controller {
   }
 
   async create(req: Request, res: Response): Promise<void> {
-    const rule = await RulesService.create(req.body.code)
-    res.status(201).location(`/api/v1/rules/${rule.id}`).json(rule)
+    const { authorId, code } = req.body
+    try {
+      const rule = await RulesService.create(authorId, code)
+      res.status(201).location(`/api/v1/rules/${rule.id}`).json(rule)
+    } catch (e) {
+      res.status(400).send(e.message)
+    }
   }
 }
 

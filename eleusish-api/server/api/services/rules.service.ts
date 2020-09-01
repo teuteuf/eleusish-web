@@ -1,7 +1,9 @@
 import L from '../../common/logger'
 import ruleRepository from '../repositories/rules.repository'
+import playerRepository from '../repositories/players.repository'
 import { Rule } from '../domain/rules/rule'
 import shortid from 'shortid'
+import { nanoid } from 'nanoid'
 
 export class RulesService {
   async all(): Promise<Rule[]> {
@@ -15,12 +17,20 @@ export class RulesService {
     return ruleRepository.findById(id)
   }
 
-  async create(code: string): Promise<Rule> {
+  async create(authorId: string, code: string): Promise<Rule> {
     L.info(`create rule with code ${code}`)
-    const rule: Rule = {
-      id: shortid(),
-      code: code,
+
+    const player = await playerRepository.findById(authorId)
+    if (player == null) {
+      throw new Error('Wrong author id.')
     }
+
+    const rule: Rule = {
+      id: nanoid(12),
+      code,
+      author: player,
+    }
+
     await ruleRepository.insert(rule)
     return rule
   }
