@@ -13,11 +13,12 @@ const ruleRepositoryDb: RuleRepository = {
         id: ruleDb.author.id,
         pseudo: ruleDb.author.pseudo,
       },
+      validated: ruleDb.validated,
     }))
   },
   findById: async (id) => {
     const repository = getRepository(Rule)
-    const ruleDb = await repository.findOne({ id }, { relations: ['player'] })
+    const ruleDb = await repository.findOne({ id }, { relations: ['author'] })
 
     if (ruleDb != null) {
       return {
@@ -27,12 +28,21 @@ const ruleRepositoryDb: RuleRepository = {
           id: ruleDb.author.id,
           pseudo: ruleDb.author.pseudo,
         },
+        validated: ruleDb.validated,
       }
     }
   },
   insert: async (rule) => {
     const repository = getRepository(Rule)
     repository.insert(rule)
+  },
+  update: async (rule) => {
+    const repository = getRepository(Rule)
+    const ruleToUpdate = await repository.findOne({ id: rule.id })
+    await repository.save({
+      ...ruleToUpdate,
+      ...rule,
+    })
   },
 }
 

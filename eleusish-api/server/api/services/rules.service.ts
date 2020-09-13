@@ -29,9 +29,24 @@ export class RulesService {
       id: nanoid(12),
       code,
       author: player,
+      validated: false,
     }
 
     await ruleRepository.insert(rule)
+    return rule
+  }
+
+  async validate(ruleId: string, validated: boolean): Promise<Rule> {
+    L.info(`validate rule ${ruleId}: ${validated}`)
+
+    const rule = await ruleRepository.findById(ruleId)
+    if (rule == null) {
+      throw new Error('Rule not found.')
+    }
+
+    const updatedRule = { ...rule, validated }
+    ruleRepository.update(updatedRule)
+
     return rule
   }
 }

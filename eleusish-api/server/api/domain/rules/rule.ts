@@ -4,6 +4,7 @@ interface Rule {
   id: string
   code: string
   author: Player
+  validated: boolean
 }
 
 export { Rule }

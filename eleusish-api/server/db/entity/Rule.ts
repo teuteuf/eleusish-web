@@ -12,4 +12,7 @@ export class Rule {
 
   @Column()
   code: string
+
+  @Column()
+  validated: boolean
 }

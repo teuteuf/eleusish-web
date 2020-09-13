@@ -71,6 +71,32 @@ paths:
         404:
           description: Rule not found
           content: {}
+    patch:
+      tags:
+      - Rules
+      parameters:
+      - name: id
+        in: path
+        description: The id of the rule to update
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: fields to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleActivatedUpdateBody'
+        required: true
+      responses:
+        200:
+          description: Return the updated rule with the specified id
+          content: {}
+        404:
+          description: Rule not found
+          content: {}
+        406:
+          description: Only 'validated' parameter can be updated.
   /spec:
     get:
       tags:
@@ -101,3 +127,11 @@ components:
       properties:
         pseudo:
           type: string
+    RuleActivatedUpdateBody:
+      title: rule fields to update
+      required:
+        - validated
+      type: object
+      properties:
+        validated:
+          type: boolean
