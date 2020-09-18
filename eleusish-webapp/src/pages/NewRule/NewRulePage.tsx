@@ -38,14 +38,15 @@ const NewRulePage = (): ReactElement => {
         placeholder="Player ID"
         onChange={(event) => setAuthorId(event.target.value)}
       />
-      <ControlledEditor
-        theme="dark"
-        height="75vh"
-        language="javascript"
-        options={{ minimap: { enabled: false } }}
-        value={code}
-        onChange={(event, value) => setCode(value)}
-      />
+      <div className={styles.editor}>
+        <ControlledEditor
+          theme="dark"
+          language="javascript"
+          options={{ minimap: { enabled: false }, scrollBeyondLastLine: false }}
+          value={code}
+          onChange={(event, value) => setCode(value)}
+        />
+      </div>
       <button
         disabled={submitting || code == null || code.length === 0}
         type="button"
