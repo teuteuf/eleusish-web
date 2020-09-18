@@ -6,30 +6,25 @@ const ruleRepositoryDb: RuleRepository = {
   findAll: async () => {
     const repository = getRepository(Rule)
     const rulesDb = await repository.find({ relations: ['author'] })
-    return rulesDb.map((ruleDb) => ({
-      id: ruleDb.id,
-      code: ruleDb.code,
-      author: {
-        id: ruleDb.author.id,
-        pseudo: ruleDb.author.pseudo,
-      },
-      validated: ruleDb.validated,
-    }))
+    return rulesDb.map(dbRuleToRule)
   },
   findById: async (id) => {
     const repository = getRepository(Rule)
     const ruleDb = await repository.findOne({ id }, { relations: ['author'] })
 
     if (ruleDb != null) {
-      return {
-        id: ruleDb.id,
-        code: ruleDb.code,
-        author: {
-          id: ruleDb.author.id,
-          pseudo: ruleDb.author.pseudo,
-        },
-        validated: ruleDb.validated,
-      }
+      return dbRuleToRule(ruleDb)
+    }
+  },
+  findNotValidatedRule: async () => {
+    const repository = getRepository(Rule)
+    const ruleDb = await repository.findOne(
+      { validated: false },
+      { relations: ['author'] }
+    )
+
+    if (ruleDb != null) {
+      return dbRuleToRule(ruleDb)
     }
   },
   insert: async (rule) => {
@@ -44,6 +39,18 @@ const ruleRepositoryDb: RuleRepository = {
       ...rule,
     })
   },
+}
+
+function dbRuleToRule(ruleDb: Rule) {
+  return {
+    id: ruleDb.id,
+    code: ruleDb.code,
+    author: {
+      id: ruleDb.author.id,
+      pseudo: ruleDb.author.pseudo,
+    },
+    validated: ruleDb.validated,
+  }
 }
 
 export default ruleRepositoryDb

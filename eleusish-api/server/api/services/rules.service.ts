@@ -2,8 +2,9 @@ import L from '../../common/logger'
 import ruleRepository from '../repositories/rules.repository'
 import playerRepository from '../repositories/players.repository'
 import { Rule } from '../domain/rules/rule'
-import shortid from 'shortid'
 import { nanoid } from 'nanoid'
+import { UnknownPlayerError } from '../domain/players/errors'
+import { RuleToValidateError } from '../domain/rules/errors'
 
 export class RulesService {
   async all(): Promise<Rule[]> {
@@ -20,9 +21,14 @@ export class RulesService {
   async create(authorId: string, code: string): Promise<Rule> {
     L.info(`create rule with code ${code}`)
 
+    const ruleToValidate = await ruleRepository.findNotValidatedRule()
+    if (ruleToValidate != null) {
+      throw new RuleToValidateError('Need to validate existing rule first')
+    }
+
     const player = await playerRepository.findById(authorId)
     if (player == null) {
-      throw new Error('Wrong author id.')
+      throw new UnknownPlayerError('Wrong author id.')
     }
 
     const rule: Rule = {
@@ -45,9 +51,9 @@ export class RulesService {
     }
 
     const updatedRule = { ...rule, validated }
-    ruleRepository.update(updatedRule)
+    await ruleRepository.update(updatedRule)
 
-    return rule
+    return updatedRule
   }
 }
 

@@ -1,5 +1,7 @@
 import RulesService from '../../services/rules.service'
 import { Request, Response } from 'express'
+import { UnknownPlayerError } from '../../domain/players/errors'
+import { RuleToValidateError } from '../../domain/rules/errors'
 
 export class Controller {
   async all(req: Request, res: Response): Promise<void> {
@@ -24,7 +26,13 @@ export class Controller {
       const rule = await RulesService.create(authorId, code)
       res.status(201).location(`/api/v1/rules/${rule.id}`).json(rule)
     } catch (e) {
-      res.status(400).send(e.message)
+      if (e instanceof UnknownPlayerError) {
+        res.status(400).send(e.message)
+      } else if (e instanceof RuleToValidateError) {
+        res.status(403).send(e.message)
+      } else {
+        res.status(400).send(e.message)
+      }
     }
   }
 
