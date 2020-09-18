@@ -7,8 +7,11 @@ import { UnknownPlayerError } from '../domain/players/errors'
 import { RuleToValidateError } from '../domain/rules/errors'
 
 export class RulesService {
-  async all(): Promise<Rule[]> {
-    const rules = await ruleRepository.findAll()
+  async all(filters: {
+    authorId?: string
+    validated?: boolean
+  }): Promise<Rule[]> {
+    const rules = await ruleRepository.findAll(filters)
     L.info(rules, 'fetch all rules')
     return rules
   }

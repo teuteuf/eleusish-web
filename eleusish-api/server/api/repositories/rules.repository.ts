@@ -3,9 +3,25 @@ import { Rule } from '../../db/entity/Rule'
 import RuleRepository from '../domain/rules/repository'
 
 const ruleRepositoryDb: RuleRepository = {
-  findAll: async () => {
+  findAll: async ({
+    authorId,
+    validated,
+  }: {
+    authorId?: string
+    validated?: boolean
+  }) => {
+    const where = {}
+    if (authorId != null) {
+      where['author'] = { id: authorId }
+    }
+    if (validated != null) {
+      where['validated'] = validated
+    }
     const repository = getRepository(Rule)
-    const rulesDb = await repository.find({ relations: ['author'] })
+    const rulesDb = await repository.find({
+      relations: ['author'],
+      where,
+    })
     return rulesDb.map(dbRuleToRule)
   },
   findById: async (id) => {

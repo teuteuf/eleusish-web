@@ -5,7 +5,11 @@ import { RuleToValidateError } from '../../domain/rules/errors'
 
 export class Controller {
   async all(req: Request, res: Response): Promise<void> {
-    const allRules = await RulesService.all()
+    const rulesFilter = {
+      validated: (req.query.validated as unknown) as boolean | undefined,
+      authorId: req.query.authorId?.toString(),
+    }
+    const allRules = await RulesService.all(rulesFilter)
     res.json(allRules)
   }
 

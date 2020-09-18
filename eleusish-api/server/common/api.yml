@@ -34,6 +34,17 @@ paths:
       tags:
       - Rules
       description: Fetch all rules
+      parameters:
+        - name: authorId
+          in: query
+          description: The id of the author
+          schema:
+            type: string
+        - name: validated
+          in: query
+          description: The value of field validated
+          schema:
+            type: boolean
       responses:
         200:
           description: Returns all rules

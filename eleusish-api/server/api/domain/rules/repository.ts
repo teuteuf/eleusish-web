@@ -1,7 +1,10 @@
 import { Rule } from './rule'
 
 interface RuleRepository {
-  findAll: () => Promise<Rule[]>
+  findAll: (filters: {
+    authorId?: string
+    validated?: boolean
+  }) => Promise<Rule[]>
   findById: (id: string) => Promise<Rule | undefined>
   findNotValidatedRule: () => Promise<Rule | undefined>
   insert: (rule: Rule) => Promise<void>
