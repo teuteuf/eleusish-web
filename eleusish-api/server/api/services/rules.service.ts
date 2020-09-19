@@ -21,15 +21,15 @@ export class RulesService {
   }
 
   async create(authorId: string, code: string): Promise<Rule> {
-    L.info(`create rule with code ${code}`)
+    L.info(`create rule with code ${code} by author ${authorId}`)
 
     const ruleToValidate = await ruleRepository.findNotValidatedRule(authorId)
     if (ruleToValidate != null) {
       throw new RuleToValidateError('Need to validate existing rule first')
     }
 
-    const player = await playerRepository.findById(authorId)
-    if (player == null) {
+    const author = await playerRepository.findById(authorId)
+    if (author == null) {
       throw new UnknownPlayerError('Wrong author id.')
     }
 
@@ -39,7 +39,7 @@ export class RulesService {
       validated: false,
     }
 
-    await ruleRepository.insert(rule)
+    await ruleRepository.insert(rule, author)
     return rule
   }
 
@@ -65,7 +65,7 @@ export class RulesService {
       throw new Error('Rule not found.')
     }
 
-    const updatedRule = { ...rule, code }
+    const updatedRule = { ...rule, code, validated: false }
     await ruleRepository.update(updatedRule)
 
     return updatedRule

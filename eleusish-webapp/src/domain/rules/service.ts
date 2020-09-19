@@ -42,3 +42,27 @@ export async function getRuleToValidate(
 
   return rulesToValidate.length > 0 ? rulesToValidate[0] : undefined
 }
+
+export async function updateCode(ruleId: string, code: string): Promise<Rule> {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_BASE_URL}/rules/${ruleId}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ code }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  if (response.status !== 200) {
+    throw new Error(await response.text())
+  }
+
+  const updatedRule = await response.json()
+
+  return {
+    id: updatedRule.id,
+    code: updatedRule.code,
+  }
+}

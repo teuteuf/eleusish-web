@@ -4,7 +4,8 @@ import styles from './NewRulePage.module.css'
 import * as RulesService from '../../domain/rules/service'
 import { Rule } from '../../domain/rules/rule'
 
-const defaultRule = `function getInitialCards (remainingCards) {
+const defaultRule = `
+function getInitialCards (remainingCards) {
   return [];
 }
 
@@ -57,7 +58,13 @@ const NewRulePage = (): ReactElement => {
 
     setSubmitting(true)
     try {
-      const rule = await RulesService.createNewRule(authorId, code)
+      let rule
+      if (currentRule == null) {
+        rule = await RulesService.createNewRule(authorId, code)
+      } else {
+        rule = await RulesService.updateCode(currentRule.id, code)
+      }
+
       setCurrentRule(rule)
       setError(undefined)
     } catch (e) {
