@@ -37,7 +37,6 @@ export class RulesService {
     const rule: Rule = {
       id: nanoid(12),
       code,
-      author: player,
       validated: false,
     }
 
