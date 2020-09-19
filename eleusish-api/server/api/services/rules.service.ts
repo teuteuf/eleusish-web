@@ -24,7 +24,7 @@ export class RulesService {
   async create(authorId: string, code: string): Promise<Rule> {
     L.info(`create rule with code ${code}`)
 
-    const ruleToValidate = await ruleRepository.findNotValidatedRule()
+    const ruleToValidate = await ruleRepository.findNotValidatedRule(authorId)
     if (ruleToValidate != null) {
       throw new RuleToValidateError('Need to validate existing rule first')
     }

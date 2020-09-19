@@ -32,10 +32,15 @@ const ruleRepositoryDb: RuleRepository = {
       return dbRuleToRule(ruleDb)
     }
   },
-  findNotValidatedRule: async () => {
+  findNotValidatedRule: async (authorId) => {
     const repository = getRepository(Rule)
     const ruleDb = await repository.findOne(
-      { validated: false },
+      {
+        validated: false,
+        author: {
+          id: authorId,
+        },
+      },
       { relations: ['author'] }
     )
 

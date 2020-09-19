@@ -9,6 +9,10 @@
     height: 0;
 }
 
+.error {
+    color: red;
+}
+
 button {
     font-size: large;
     text-transform: uppercase;

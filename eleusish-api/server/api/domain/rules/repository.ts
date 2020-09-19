@@ -6,7 +6,7 @@ interface RuleRepository {
     validated?: boolean
   }) => Promise<Rule[]>
   findById: (id: string) => Promise<Rule | undefined>
-  findNotValidatedRule: () => Promise<Rule | undefined>
+  findNotValidatedRule: (authorId: string) => Promise<Rule | undefined>
   insert: (rule: Rule) => Promise<void>
   update: (rule: Rule) => Promise<void>
 }
