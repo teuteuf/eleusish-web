@@ -42,12 +42,23 @@ export class Controller {
 
   async update(req: Request, res: Response): Promise<void> {
     const id = req.params['id']
-    const { validated, ...otherFields } = req.body
-    if (validated == null || Object.keys(otherFields).length !== 0) {
+    const { validated, code, ...otherFields } = req.body
+
+    if (
+      (validated == null && code == null) ||
+      Object.keys(otherFields).length !== 0
+    ) {
       res.status(406).send("Can't update given fields.")
     }
+
     try {
-      const rule = await RulesService.validate(id, validated)
+      let rule
+      if (validated != null) {
+        rule = await RulesService.validate(id, validated)
+      }
+      if (code != null) {
+        rule = await RulesService.updateCode(id, code)
+      }
       res.status(200).send(rule)
     } catch (e) {
       res.status(404).send(e.message)

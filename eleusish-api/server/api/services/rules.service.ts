@@ -15,7 +15,6 @@ export class RulesService {
     L.info(rules, 'fetch all rules')
     return rules
   }
-
   async byId(id: string): Promise<Rule> {
     L.info(`fetch rule with id ${id}`)
     return ruleRepository.findById(id)
@@ -53,6 +52,20 @@ export class RulesService {
     }
 
     const updatedRule = { ...rule, validated }
+    await ruleRepository.update(updatedRule)
+
+    return updatedRule
+  }
+
+  async updateCode(id: string, code: string): Promise<Rule> {
+    L.info(`update code for rule ${id}`)
+
+    const rule = await ruleRepository.findById(id)
+    if (rule == null) {
+      throw new Error('Rule not found.')
+    }
+
+    const updatedRule = { ...rule, code }
     await ruleRepository.update(updatedRule)
 
     return updatedRule

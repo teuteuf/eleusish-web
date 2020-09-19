@@ -107,7 +107,7 @@ paths:
           description: Rule not found
           content: {}
         406:
-          description: Only 'validated' parameter can be updated.
+          description: Only 'validated' and 'code' parameters can be updated.
   /spec:
     get:
       tags:
@@ -140,9 +140,9 @@ components:
           type: string
     RuleActivatedUpdateBody:
       title: rule fields to update
-      required:
-        - validated
       type: object
       properties:
         validated:
           type: boolean
+        code:
+          type: string
