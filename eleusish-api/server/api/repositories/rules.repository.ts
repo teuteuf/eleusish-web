@@ -19,10 +19,21 @@ const ruleRepositoryDb: RuleRepository = {
     }
     const repository = getRepository(Rule)
     const rulesDb = await repository.find({
-      relations: ['author'],
+      relations: ['author', 'ruleName'],
       where,
     })
-    return rulesDb.map(dbRuleToRule)
+    return rulesDb.map((ruleDb) => ({
+      id: ruleDb.id,
+      code: ruleDb.code,
+      validated: ruleDb.validated,
+      author: {
+        pseudo: ruleDb.author.pseudo,
+      },
+      ruleName: {
+        godName: ruleDb.ruleName.godName,
+        number: ruleDb.ruleName.number,
+      },
+    }))
   },
   findById: async (id) => {
     const repository = getRepository(Rule)

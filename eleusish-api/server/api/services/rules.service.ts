@@ -1,7 +1,7 @@
 import L from '../../common/logger'
 import ruleRepository from '../repositories/rules.repository'
 import playerRepository from '../repositories/players.repository'
-import { Rule } from '../domain/rules/rule'
+import { Rule, RuleWithAuthorAndName } from '../domain/rules/rule'
 import { nanoid } from 'nanoid'
 import { UnknownPlayerError } from '../domain/players/errors'
 import { RuleToValidateError } from '../domain/rules/errors'
@@ -11,7 +11,7 @@ export class RulesService {
   async all(filters: {
     authorId?: string
     validated?: boolean
-  }): Promise<Rule[]> {
+  }): Promise<RuleWithAuthorAndName[]> {
     const rules = await ruleRepository.findAll(filters)
     L.info(rules, 'fetch all rules')
     return rules
