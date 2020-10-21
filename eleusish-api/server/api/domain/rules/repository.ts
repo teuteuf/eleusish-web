@@ -1,5 +1,6 @@
 import { Rule } from './rule'
 import { Player } from '../players/player'
+import { RuleName } from '../ruleNames/ruleName'
 
 interface RuleRepository {
   findAll: (filters: {
@@ -8,7 +9,7 @@ interface RuleRepository {
   }) => Promise<Rule[]>
   findById: (id: string) => Promise<Rule | undefined>
   findNotValidatedRule: (authorId: string) => Promise<Rule | undefined>
-  insert: (rule: Rule, author: Player) => Promise<void>
+  insert: (rule: Rule, author: Player, ruleName: RuleName) => Promise<void>
   update: (rule: Rule) => Promise<void>
 }
 

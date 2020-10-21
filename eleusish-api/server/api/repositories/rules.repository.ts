@@ -48,11 +48,12 @@ const ruleRepositoryDb: RuleRepository = {
       return dbRuleToRule(ruleDb)
     }
   },
-  insert: async (rule, author) => {
+  insert: async (rule, author, ruleName) => {
     const repository = getRepository(Rule)
     await repository.insert({
       ...rule,
       author,
+      ruleName,
     })
   },
   update: async (rule) => {

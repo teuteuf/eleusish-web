@@ -2,7 +2,6 @@ import RulesService from '../../services/rules.service'
 import { Request, Response } from 'express'
 import { UnknownPlayerError } from '../../domain/players/errors'
 import { RuleToValidateError } from '../../domain/rules/errors'
-import { generateGodName } from '../../domain/rules/rule'
 
 export class Controller {
   async all(req: Request, res: Response): Promise<void> {
@@ -64,10 +63,6 @@ export class Controller {
     } catch (e) {
       res.status(404).send(e.message)
     }
-  }
-
-  generateGodName(req: Request, res: Response): void {
-    res.status(200).send(generateGodName())
   }
 }
 

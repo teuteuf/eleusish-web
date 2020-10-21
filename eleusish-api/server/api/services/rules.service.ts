@@ -5,6 +5,7 @@ import { Rule } from '../domain/rules/rule'
 import { nanoid } from 'nanoid'
 import { UnknownPlayerError } from '../domain/players/errors'
 import { RuleToValidateError } from '../domain/rules/errors'
+import ruleNamesService from './ruleNames.service'
 
 export class RulesService {
   async all(filters: {
@@ -39,7 +40,10 @@ export class RulesService {
       validated: false,
     }
 
-    await ruleRepository.insert(rule, author)
+    const ruleName = await ruleNamesService.generate()
+
+    await ruleRepository.insert(rule, author, ruleName)
+
     return rule
   }
 

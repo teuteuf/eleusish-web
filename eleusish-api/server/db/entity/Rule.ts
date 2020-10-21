@@ -1,14 +1,17 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm'
 import { Player } from './Player'
-import { ManyToOne } from 'typeorm'
+import { RuleName } from './RuleName'
 
 @Entity()
 export class Rule {
   @PrimaryColumn()
   id: string
 
-  @ManyToOne((type) => Player)
+  @ManyToOne(() => Player)
   author: Player
+
+  @ManyToOne(() => RuleName)
+  ruleName: RuleName
 
   @Column()
   code: string
