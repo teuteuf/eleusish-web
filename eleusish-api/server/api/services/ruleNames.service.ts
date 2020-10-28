@@ -1,6 +1,6 @@
 import { generateGodName, RuleName } from '../domain/ruleNames/ruleName'
 import { nanoid } from 'nanoid'
-import ruleNameRepository from '../repositories/ruleNames.repositor'
+import ruleNameRepository from '../repositories/ruleNames.repository'
 
 const service = {
   generate: async (): Promise<RuleName> => {

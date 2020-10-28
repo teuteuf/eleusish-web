@@ -37,10 +37,26 @@ const ruleRepositoryDb: RuleRepository = {
   },
   findById: async (id) => {
     const repository = getRepository(Rule)
-    const ruleDb = await repository.findOne({ id }, { relations: ['author'] })
+    const ruleDb = await repository.findOne(
+      { id },
+      { relations: ['author', 'ruleName'] }
+    )
 
     if (ruleDb != null) {
-      return dbRuleToRule(ruleDb)
+      return {
+        id: ruleDb.id,
+        code: ruleDb.code,
+        validated: ruleDb.validated,
+        author: {
+          id: ruleDb.author.id,
+          pseudo: ruleDb.author.pseudo,
+        },
+        ruleName: {
+          id: ruleDb.ruleName.id,
+          godName: ruleDb.ruleName.godName,
+          number: ruleDb.ruleName.number,
+        },
+      }
     }
   },
   findNotValidatedRule: async (authorId) => {

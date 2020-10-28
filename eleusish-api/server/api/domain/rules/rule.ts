@@ -7,9 +7,14 @@ interface Rule {
   validated: boolean
 }
 
+interface RuleWithRelations extends Rule {
+  author: Player
+  ruleName: RuleName
+}
+
 interface RuleWithAuthorAndName extends Rule {
   author: Pick<Player, 'pseudo'>
   ruleName: Pick<RuleName, 'godName' | 'number'>
 }
 
-export { Rule, RuleWithAuthorAndName }
+export { Rule, RuleWithRelations, RuleWithAuthorAndName }

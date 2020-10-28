@@ -92,6 +92,16 @@ paths:
         required: true
         schema:
           type: string
+      - name: Player-ID
+        in: header
+        schema:
+          type: string
+        required: false
+      - name: API-Key
+        in: header
+        schema:
+          type: string
+        required: false
       requestBody:
         description: fields to update
         content:

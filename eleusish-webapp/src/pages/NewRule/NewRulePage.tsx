@@ -99,7 +99,7 @@ const NewRulePage = (): ReactElement => {
       if (currentRule == null) {
         rule = await RulesService.createNewRule(authorId, code)
       } else {
-        rule = await RulesService.updateCode(currentRule.id, code)
+        rule = await RulesService.updateCode(authorId, currentRule.id, code)
       }
 
       setCurrentRule(rule)

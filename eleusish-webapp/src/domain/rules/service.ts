@@ -43,7 +43,11 @@ export async function getRuleToValidate(
   return rulesToValidate.length > 0 ? rulesToValidate[0] : undefined
 }
 
-export async function updateCode(ruleId: string, code: string): Promise<Rule> {
+export async function updateCode(
+  authorId: string,
+  ruleId: string,
+  code: string
+): Promise<Rule> {
   const response = await fetch(
     `${process.env.REACT_APP_API_BASE_URL}/rules/${ruleId}`,
     {
@@ -51,6 +55,7 @@ export async function updateCode(ruleId: string, code: string): Promise<Rule> {
       body: JSON.stringify({ code }),
       headers: {
         'Content-Type': 'application/json',
+        'Player-ID': authorId,
       },
     }
   )

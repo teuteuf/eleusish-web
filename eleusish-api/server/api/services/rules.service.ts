@@ -47,7 +47,12 @@ export class RulesService {
     return rule
   }
 
-  async validate(ruleId: string, validated: boolean): Promise<Rule> {
+  async validate(
+    ruleId: string,
+    validated: boolean,
+    playerId: string,
+    apiKey: string
+  ): Promise<Rule> {
     L.info(`validate rule ${ruleId}: ${validated}`)
 
     const rule = await ruleRepository.findById(ruleId)
@@ -55,21 +60,35 @@ export class RulesService {
       throw new Error('Rule not found.')
     }
 
-    const updatedRule = { ...rule, validated }
+    if (rule.author.id !== playerId) {
+      throw new Error('Not allowed to validate someone else rule.')
+    }
+
+    if (apiKey !== process.env.API_KEY) {
+      throw new Error('Valid API key not provided')
+    }
+
+    const { id, code } = rule
+    const updatedRule = { id, code, validated }
     await ruleRepository.update(updatedRule)
 
     return updatedRule
   }
 
-  async updateCode(id: string, code: string): Promise<Rule> {
+  async updateCode(id: string, code: string, playerId: string): Promise<Rule> {
     L.info(`update code for rule ${id}`)
 
     const rule = await ruleRepository.findById(id)
+
     if (rule == null) {
       throw new Error('Rule not found.')
     }
 
-    const updatedRule = { ...rule, code, validated: false }
+    if (rule.author.id !== playerId) {
+      throw new Error('Not allowed to edit someone else rule.')
+    }
+
+    const updatedRule = { id: rule.id, code, validated: false }
     await ruleRepository.update(updatedRule)
 
     return updatedRule

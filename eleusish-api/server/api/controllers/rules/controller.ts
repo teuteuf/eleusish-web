@@ -43,6 +43,8 @@ export class Controller {
   async update(req: Request, res: Response): Promise<void> {
     const id = req.params['id']
     const { validated, code, ...otherFields } = req.body
+    const playerId = req.header('Player-ID')
+    const apiKey = req.header('API-Key')
 
     if (
       (validated == null && code == null) ||
@@ -54,14 +56,14 @@ export class Controller {
     try {
       let rule
       if (validated != null) {
-        rule = await RulesService.validate(id, validated)
+        rule = await RulesService.validate(id, validated, playerId, apiKey)
       }
       if (code != null) {
-        rule = await RulesService.updateCode(id, code)
+        rule = await RulesService.updateCode(id, code, playerId)
       }
       res.status(200).send(rule)
     } catch (e) {
-      res.status(404).send(e.message)
+      res.status(400).send(e.message)
     }
   }
 }
