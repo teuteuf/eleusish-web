@@ -75,7 +75,12 @@ export class RulesService {
     return updatedRule
   }
 
-  async updateCode(id: string, code: string, playerId: string): Promise<Rule> {
+  async updateCode(
+    id: string,
+    code: string,
+    playerId: string,
+    validated: boolean
+  ): Promise<Rule> {
     L.info(`update code for rule ${id}`)
 
     const rule = await ruleRepository.findById(id)
@@ -88,7 +93,7 @@ export class RulesService {
       throw new Error('Not allowed to edit someone else rule.')
     }
 
-    const updatedRule = { id: rule.id, code, validated: false }
+    const updatedRule = { id: rule.id, code, validated }
     await ruleRepository.update(updatedRule)
 
     return updatedRule

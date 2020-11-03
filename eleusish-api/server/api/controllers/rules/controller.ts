@@ -59,7 +59,12 @@ export class Controller {
         rule = await RulesService.validate(id, validated, playerId, apiKey)
       }
       if (code != null) {
-        rule = await RulesService.updateCode(id, code, playerId)
+        rule = await RulesService.updateCode(
+          id,
+          code,
+          playerId,
+          validated ?? false
+        )
       }
       res.status(200).send(rule)
     } catch (e) {
