@@ -21,6 +21,9 @@ const ruleRepositoryDb: RuleRepository = {
     const rulesDb = await repository.find({
       relations: ['author', 'ruleName'],
       where,
+      order: {
+        index: 'ASC',
+      },
     })
     return rulesDb.map((ruleDb) => ({
       id: ruleDb.id,
@@ -68,7 +71,7 @@ const ruleRepositoryDb: RuleRepository = {
           id: authorId,
         },
       },
-      { relations: ['author'] }
+      { relations: ['author'], order: { index: 'ASC' } }
     )
 
     if (ruleDb != null) {

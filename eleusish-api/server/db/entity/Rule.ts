@@ -18,4 +18,7 @@ export class Rule {
 
   @Column()
   validated: boolean
+
+  @Column()
+  index: number
 }
