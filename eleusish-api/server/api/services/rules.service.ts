@@ -24,6 +24,10 @@ export class RulesService {
   async create(authorId: string, code: string): Promise<Rule> {
     L.info(`create rule with code ${code} by author ${authorId}`)
 
+    if (code.length > 2000) {
+      throw new Error('Too many characters in rule! (Max: 2000)')
+    }
+
     const ruleToValidate = await ruleRepository.findNotValidatedRule(authorId)
     if (ruleToValidate != null) {
       throw new RuleToValidateError('Need to validate existing rule first')
@@ -82,6 +86,10 @@ export class RulesService {
     validated: boolean
   ): Promise<Rule> {
     L.info(`update code for rule ${id}`)
+
+    if (code.length > 2000) {
+      throw new Error('Too many characters in rule! (Max: 2000)')
+    }
 
     const rule = await ruleRepository.findById(id)
 
