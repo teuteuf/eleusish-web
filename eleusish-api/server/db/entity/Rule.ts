@@ -19,6 +19,6 @@ export class Rule {
   @Column()
   validated: boolean
 
-  @Column()
+  @Column({ nullable: true })
   index: number
 }
