@@ -101,7 +101,7 @@ export class RulesService {
       throw new Error('Too many characters in rule! (Max: 2000)')
     }
 
-    if (shortDescription.length > 1000) {
+    if (shortDescription != null && shortDescription.length > 1000) {
       throw new Error('Too many characters in short description! (Max: 1000)')
     }
 
@@ -115,7 +115,12 @@ export class RulesService {
       throw new Error('Not allowed to edit someone else rule.')
     }
 
-    const updatedRule = { id: rule.id, code, validated, shortDescription }
+    const updatedRule = {
+      id: rule.id,
+      code,
+      validated,
+      shortDescription: shortDescription ?? rule.shortDescription,
+    }
     await ruleRepository.update(updatedRule)
 
     return updatedRule
