@@ -2,11 +2,12 @@ import { Rule } from './rule'
 
 export async function createNewRule(
   authorId: string,
-  code: string
+  code: string,
+  shortDescription: string
 ): Promise<Rule> {
   const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/rules`, {
     method: 'POST',
-    body: JSON.stringify({ authorId, code }),
+    body: JSON.stringify({ authorId, code, shortDescription }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -21,6 +22,7 @@ export async function createNewRule(
   return {
     id: createdRule.id,
     code: createdRule.code,
+    shortDescription: createdRule.shortDescription,
   }
 }
 
@@ -46,13 +48,14 @@ export async function getRuleToValidate(
 export async function updateCode(
   authorId: string,
   ruleId: string,
-  code: string
+  code: string,
+  shortDescription: string
 ): Promise<Rule> {
   const response = await fetch(
     `${process.env.REACT_APP_API_BASE_URL}/rules/${ruleId}`,
     {
       method: 'PATCH',
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, shortDescription }),
       headers: {
         'Content-Type': 'application/json',
         'Player-ID': authorId,
@@ -69,5 +72,6 @@ export async function updateCode(
   return {
     id: updatedRule.id,
     code: updatedRule.code,
+    shortDescription: updatedRule.shortDescription,
   }
 }

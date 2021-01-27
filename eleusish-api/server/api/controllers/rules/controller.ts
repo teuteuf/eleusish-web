@@ -25,9 +25,9 @@ export class Controller {
   }
 
   async create(req: Request, res: Response): Promise<void> {
-    const { authorId, code } = req.body
+    const { authorId, code, shortDescription } = req.body
     try {
-      const rule = await RulesService.create(authorId, code)
+      const rule = await RulesService.create(authorId, code, shortDescription)
       res.status(201).location(`/api/v1/rules/${rule.id}`).json(rule)
     } catch (e) {
       if (e instanceof UnknownPlayerError) {
@@ -42,7 +42,7 @@ export class Controller {
 
   async update(req: Request, res: Response): Promise<void> {
     const id = req.params['id']
-    const { validated, code, ...otherFields } = req.body
+    const { validated, code, shortDescription, ...otherFields } = req.body
     const playerId = req.header('Player-ID')
     const apiKey = req.header('API-Key')
 
@@ -63,7 +63,8 @@ export class Controller {
           id,
           code,
           playerId,
-          validated ?? false
+          validated ?? false,
+          shortDescription
         )
       }
       res.status(200).send(rule)

@@ -21,11 +21,19 @@ export class RulesService {
     return ruleRepository.findById(id)
   }
 
-  async create(authorId: string, code: string): Promise<Rule> {
+  async create(
+    authorId: string,
+    code: string,
+    shortDescription: string
+  ): Promise<Rule> {
     L.info(`create rule with code ${code} by author ${authorId}`)
 
     if (code.length > 2000) {
       throw new Error('Too many characters in rule! (Max: 2000)')
+    }
+
+    if (shortDescription.length > 1000) {
+      throw new Error('Too many characters in short description! (Max: 1000)')
     }
 
     const ruleToValidate = await ruleRepository.findNotValidatedRule(authorId)
@@ -42,6 +50,7 @@ export class RulesService {
       id: nanoid(12),
       code,
       validated: false,
+      shortDescription,
     }
 
     const ruleName = await ruleNamesService.generate()
@@ -72,8 +81,8 @@ export class RulesService {
       throw new Error('Valid API key not provided')
     }
 
-    const { id, code } = rule
-    const updatedRule = { id, code, validated }
+    const { id, code, shortDescription } = rule
+    const updatedRule = { id, code, validated, shortDescription }
     await ruleRepository.update(updatedRule)
 
     return updatedRule
@@ -83,12 +92,17 @@ export class RulesService {
     id: string,
     code: string,
     playerId: string,
-    validated: boolean
+    validated: boolean,
+    shortDescription: string
   ): Promise<Rule> {
     L.info(`update code for rule ${id}`)
 
     if (code.length > 2000) {
       throw new Error('Too many characters in rule! (Max: 2000)')
+    }
+
+    if (shortDescription.length > 1000) {
+      throw new Error('Too many characters in short description! (Max: 1000)')
     }
 
     const rule = await ruleRepository.findByIdWithRelations(id)
@@ -101,7 +115,7 @@ export class RulesService {
       throw new Error('Not allowed to edit someone else rule.')
     }
 
-    const updatedRule = { id: rule.id, code, validated }
+    const updatedRule = { id: rule.id, code, validated, shortDescription }
     await ruleRepository.update(updatedRule)
 
     return updatedRule

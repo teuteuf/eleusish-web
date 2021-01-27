@@ -54,6 +54,7 @@ function isValid (previousCards, newCard) {
 const NewRulePage = (): ReactElement => {
   const [currentRule, setCurrentRule] = useState<Rule>()
   const [code, setCode] = useState<string | undefined>(defaultRule)
+  const [shortDescription, setShortDescription] = useState<string>('')
   const [authorId, setAuthorId] = useState<string>(
     localStorage.getItem('authorId') ?? ''
   )
@@ -74,6 +75,7 @@ const NewRulePage = (): ReactElement => {
       if (currentLoading) {
         setCurrentRule(ruleToValidate)
         setCode(ruleToValidate?.code ?? defaultRule)
+        setShortDescription(ruleToValidate?.shortDescription ?? '')
       }
     })()
 
@@ -87,6 +89,10 @@ const NewRulePage = (): ReactElement => {
     setAuthorId(e.target.value)
   }
 
+  const handleChangeShortDescription = (e: ChangeEvent<HTMLInputElement>) => {
+    setShortDescription(e.target.value)
+  }
+
   const handleSubmit = async () => {
     if (code == null || !submitAllowed) {
       setError('submit not allowed')
@@ -97,9 +103,18 @@ const NewRulePage = (): ReactElement => {
     try {
       let rule
       if (currentRule == null) {
-        rule = await RulesService.createNewRule(authorId, code)
+        rule = await RulesService.createNewRule(
+          authorId,
+          code,
+          shortDescription
+        )
       } else {
-        rule = await RulesService.updateCode(authorId, currentRule.id, code)
+        rule = await RulesService.updateCode(
+          authorId,
+          currentRule.id,
+          code,
+          shortDescription
+        )
       }
 
       setCurrentRule(rule)
@@ -116,11 +131,24 @@ const NewRulePage = (): ReactElement => {
   return (
     <div className={styles.newRulePage}>
       <h1>{currentRule != null ? `Rule [${currentRule.id}]` : 'New rule'}</h1>
-      <input
-        placeholder="Player ID"
-        onChange={handleChangeAuthorId}
-        value={authorId}
-      />
+      <div className={styles.info}>
+        <div className={styles.playerId}>
+          <div className={styles.label}>Player ID:</div>
+          <input
+            onChange={handleChangeAuthorId}
+            value={authorId}
+            placeholder="pLaY3rID from the app!"
+          />
+        </div>
+        <div className={styles.shortDescription}>
+          <div className={styles.label}>Short Description:</div>
+          <input
+            onChange={handleChangeShortDescription}
+            value={shortDescription}
+            placeholder="this won't be displayed to player!"
+          />
+        </div>
+      </div>
       <div className={styles.editor}>
         <ControlledEditor
           theme="dark"

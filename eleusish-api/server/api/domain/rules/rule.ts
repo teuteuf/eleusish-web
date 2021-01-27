@@ -5,6 +5,7 @@ interface Rule {
   id: string
   code: string
   validated: boolean
+  shortDescription: string
 }
 
 interface RuleWithRelations extends Rule {

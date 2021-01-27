@@ -21,4 +21,7 @@ export class Rule {
 
   @Column({ nullable: true })
   index: number
+
+  @Column()
+  shortDescription: string
 }

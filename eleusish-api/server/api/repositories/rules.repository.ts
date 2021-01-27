@@ -29,6 +29,7 @@ const ruleRepositoryDb: RuleRepository = {
       id: ruleDb.id,
       code: ruleDb.code,
       validated: ruleDb.validated,
+      shortDescription: ruleDb.shortDescription,
       author: {
         pseudo: ruleDb.author.pseudo,
       },
@@ -50,6 +51,7 @@ const ruleRepositoryDb: RuleRepository = {
         id: ruleDb.id,
         code: ruleDb.code,
         validated: ruleDb.validated,
+        shortDescription: ruleDb.shortDescription,
         author: {
           id: ruleDb.author.id,
           pseudo: ruleDb.author.pseudo,
@@ -106,6 +108,7 @@ function dbRuleToRule(ruleDb: Rule) {
     id: ruleDb.id,
     code: ruleDb.code,
     validated: ruleDb.validated,
+    shortDescription: ruleDb.shortDescription,
   }
 }
 
