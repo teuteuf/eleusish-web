@@ -59,7 +59,7 @@ export class RulesService {
   ): Promise<Rule> {
     L.info(`validate rule ${ruleId}: ${validated}`)
 
-    const rule = await ruleRepository.findById(ruleId)
+    const rule = await ruleRepository.findByIdWithRelations(ruleId)
     if (rule == null) {
       throw new Error('Rule not found.')
     }
@@ -91,7 +91,7 @@ export class RulesService {
       throw new Error('Too many characters in rule! (Max: 2000)')
     }
 
-    const rule = await ruleRepository.findById(id)
+    const rule = await ruleRepository.findByIdWithRelations(id)
 
     if (rule == null) {
       throw new Error('Rule not found.')

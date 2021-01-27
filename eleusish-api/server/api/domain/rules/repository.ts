@@ -7,7 +7,8 @@ interface RuleRepository {
     authorId?: string
     validated?: boolean
   }) => Promise<RuleWithAuthorAndName[]>
-  findById: (id: string) => Promise<RuleWithRelations | undefined>
+  findByIdWithRelations: (id: string) => Promise<RuleWithRelations | undefined>
+  findById: (id: string) => Promise<Rule | undefined>
   findNotValidatedRule: (authorId: string) => Promise<Rule | undefined>
   insert: (rule: Rule, author: Player, ruleName: RuleName) => Promise<void>
   update: (rule: Rule) => Promise<void>

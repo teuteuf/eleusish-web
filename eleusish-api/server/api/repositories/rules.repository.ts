@@ -38,7 +38,7 @@ const ruleRepositoryDb: RuleRepository = {
       },
     }))
   },
-  findById: async (id) => {
+  findByIdWithRelations: async (id) => {
     const repository = getRepository(Rule)
     const ruleDb = await repository.findOne(
       { id },
@@ -61,6 +61,11 @@ const ruleRepositoryDb: RuleRepository = {
         },
       }
     }
+  },
+  findById: async (id) => {
+    const repository = getRepository(Rule)
+    const ruleDb = await repository.findOne({ id })
+    return ruleDb && dbRuleToRule(ruleDb)
   },
   findNotValidatedRule: async (authorId) => {
     const repository = getRepository(Rule)
