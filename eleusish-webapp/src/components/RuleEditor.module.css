@@ -1,0 +1,31 @@
+.info {
+    display: flex;
+    margin: 0.25em 0;
+    height: 2em;
+}
+
+.shortDescription {
+    flex: 1;
+}
+
+.shortDescription {
+    display: flex;
+}
+
+.shortDescription > input {
+    flex: 1;
+}
+
+.editor {
+    flex-grow: 1;
+    height: 0;
+}
+
+.error {
+    color: red;
+}
+
+button {
+    font-size: large;
+    text-transform: uppercase;
+}
