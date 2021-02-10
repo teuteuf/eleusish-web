@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { Rule } from '../domain/rules/rule'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { formatRuleName, Rule } from '../domain/rules/rule'
 import * as RulesService from '../domain/rules/service'
 import styles from './App.module.css'
 import RuleEditor from './RuleEditor'
@@ -7,9 +7,16 @@ import RuleList from './RuleList'
 
 const App = (): JSX.Element => {
   const [currentRule, setCurrentRule] = useState<Rule>()
+  const [ruleToValidate, setRuleToValidate] = useState<Rule>()
+  const [validatedRules, setValidatedRules] = useState<Rule[]>([])
   const [authorId, setAuthorId] = useState<string>(
     localStorage.getItem('authorId') ?? ''
   )
+
+  const handleRuleSaved = useCallback((rule: Rule) => {
+    setCurrentRule(rule)
+    setRuleToValidate(rule)
+  }, [])
 
   useEffect(() => {
     if (authorId.length === 0) {
@@ -19,8 +26,11 @@ const App = (): JSX.Element => {
     let currentLoading = true
     ;(async () => {
       const ruleToValidate = await RulesService.getRuleToValidate(authorId)
+      const validatedRules = await RulesService.getValidatedRules(authorId)
       if (currentLoading) {
         setCurrentRule(ruleToValidate)
+        setRuleToValidate(ruleToValidate)
+        setValidatedRules(validatedRules)
       }
     })()
 
@@ -37,12 +47,16 @@ const App = (): JSX.Element => {
   return (
     <div className={styles.page}>
       <div className={styles.sidePanel}>
-        <RuleList rules={[]} />
+        <RuleList
+          ruleToValidate={ruleToValidate}
+          validatedRules={validatedRules}
+          onRuleSelected={setCurrentRule}
+        />
       </div>
       <div className={styles.mainPanel}>
         <div className={styles.header}>
           <h1 className={styles.title}>
-            {currentRule != null ? `Rule [${currentRule.id}]` : 'New rule'}
+            {currentRule != null ? formatRuleName(currentRule) : 'New rule'}
           </h1>
           <div className={styles.playerId}>
             <div className={styles.label}>Player ID:</div>
@@ -56,7 +70,10 @@ const App = (): JSX.Element => {
         <RuleEditor
           authorId={authorId}
           rule={currentRule}
-          setRule={setCurrentRule}
+          onRuleSaved={handleRuleSaved}
+          readOnly={
+            ruleToValidate != null && ruleToValidate.id !== currentRule?.id
+          }
         />
       </div>
     </div>

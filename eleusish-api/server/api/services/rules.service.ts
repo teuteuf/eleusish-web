@@ -25,7 +25,7 @@ export class RulesService {
     authorId: string,
     code: string,
     shortDescription: string
-  ): Promise<Rule> {
+  ): Promise<RuleWithAuthorAndName> {
     L.info(`create rule with code ${code} by author ${authorId}`)
 
     if (code.length > 2000) {
@@ -57,7 +57,7 @@ export class RulesService {
 
     await ruleRepository.insert(rule, author, ruleName)
 
-    return rule
+    return ruleRepository.findByIdWithRelations(rule.id)
   }
 
   async validate(
@@ -94,7 +94,7 @@ export class RulesService {
     playerId: string,
     validated: boolean,
     shortDescription: string
-  ): Promise<Rule> {
+  ): Promise<RuleWithAuthorAndName> {
     L.info(`update code for rule ${id}`)
 
     if (code.length > 2000) {
@@ -103,6 +103,11 @@ export class RulesService {
 
     if (shortDescription != null && shortDescription.length > 1000) {
       throw new Error('Too many characters in short description! (Max: 1000)')
+    }
+
+    const ruleToValidate = await ruleRepository.findNotValidatedRule(playerId)
+    if (ruleToValidate != null && ruleToValidate.id !== id) {
+      throw new RuleToValidateError('Need to validate existing rule first')
     }
 
     const rule = await ruleRepository.findByIdWithRelations(id)
@@ -123,7 +128,7 @@ export class RulesService {
     }
     await ruleRepository.update(updatedRule)
 
-    return updatedRule
+    return ruleRepository.findByIdWithRelations(rule.id)
   }
 }
 

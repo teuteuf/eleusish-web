@@ -47,7 +47,7 @@ export class Controller {
     const apiKey = req.header('API-Key')
 
     if (
-      (validated == null && code == null) ||
+      (validated == null && code == null && shortDescription == null) ||
       Object.keys(otherFields).length !== 0
     ) {
       res.status(406).send("Can't update given fields.")

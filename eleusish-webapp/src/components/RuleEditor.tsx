@@ -9,13 +9,15 @@ import { ControlledEditor } from '@monaco-editor/react'
 interface RuleEditorProps {
   authorId: string
   rule?: Rule
-  setRule: (rule: Rule) => void
+  onRuleSaved: (rule: Rule) => void
+  readOnly: boolean
 }
 
 const RuleEditor = ({
   authorId,
   rule,
-  setRule,
+  onRuleSaved,
+  readOnly,
 }: RuleEditorProps): JSX.Element => {
   const [code, setCode] = useState<string | undefined>(defaultRule)
   const [shortDescription, setShortDescription] = useState<string>('')
@@ -23,7 +25,11 @@ const RuleEditor = ({
   const [error, setError] = useState<string>()
 
   const submitAllowed =
-    code != null && code.length !== 0 && authorId.length !== 0 && !submitting
+    !readOnly &&
+    code != null &&
+    code.length !== 0 &&
+    authorId.length !== 0 &&
+    !submitting
 
   useEffect(() => {
     setCode(rule?.code ?? defaultRule)
@@ -58,7 +64,7 @@ const RuleEditor = ({
         )
       }
 
-      setRule(submittedRule)
+      onRuleSaved(submittedRule)
       setError(undefined)
     } catch (e) {
       const errorMessage = `error while creating rule: ${e.message}`
@@ -78,6 +84,7 @@ const RuleEditor = ({
             onChange={handleChangeShortDescription}
             value={shortDescription}
             placeholder="this won't be displayed to player!"
+            disabled={readOnly}
           />
         </div>
       </div>
@@ -85,7 +92,11 @@ const RuleEditor = ({
         <ControlledEditor
           theme="dark"
           language="javascript"
-          options={{ minimap: { enabled: false }, scrollBeyondLastLine: false }}
+          options={{
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            readOnly,
+          }}
           value={code}
           onChange={(event, value) => setCode(value)}
         />

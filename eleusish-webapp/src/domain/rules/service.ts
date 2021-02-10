@@ -17,13 +17,7 @@ export async function createNewRule(
     throw new Error(await response.text())
   }
 
-  const createdRule = await response.json()
-
-  return {
-    id: createdRule.id,
-    code: createdRule.code,
-    shortDescription: createdRule.shortDescription,
-  }
+  return await response.json()
 }
 
 export async function getRuleToValidate(
@@ -43,6 +37,23 @@ export async function getRuleToValidate(
   const rulesToValidate = await response.json()
 
   return rulesToValidate.length > 0 ? rulesToValidate[0] : undefined
+}
+
+export async function getValidatedRules(authorId: string): Promise<Rule[]> {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_BASE_URL}/rules?validated=true&authorId=${authorId}`,
+    {
+      method: 'GET',
+    }
+  )
+
+  if (response.status !== 200) {
+    throw new Error(await response.text())
+  }
+
+  const rules = await response.json()
+
+  return rules ?? []
 }
 
 export async function updateCode(
@@ -67,11 +78,5 @@ export async function updateCode(
     throw new Error(await response.text())
   }
 
-  const updatedRule = await response.json()
-
-  return {
-    id: updatedRule.id,
-    code: updatedRule.code,
-    shortDescription: updatedRule.shortDescription,
-  }
+  return await response.json()
 }

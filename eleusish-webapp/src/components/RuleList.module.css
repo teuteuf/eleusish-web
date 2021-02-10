@@ -1,0 +1,17 @@
+.ruleList {
+    overflow: auto;
+    max-height: 100VH;
+}
+
+.ruleButton {
+    border: 1px black dashed;
+    margin-bottom: 0.5em;
+}
+
+.ruleButton button {
+    width: 100%
+}
+
+.ruleButton span {
+    color: #3b4151;
+}
